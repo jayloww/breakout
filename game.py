@@ -69,13 +69,8 @@ class Game:
             surface_state = self.font.render(f"You {self.state}", False, (250, 250, 250))
             surface_score = self.font.render(f"Score {self.score}", False, (250, 250, 250))
 
-            if len(str(self.score)) == 1:
-                width_change_score = 0
-            else:
-                width_change_score = 10 * (len(str(self.score)) - 2)
-
             text_rect_state = surface_state.get_rect(center=(self.w / 2, self.h / 2))
-            text_rect_score = surface_state.get_rect(center=(self.w / 2 - width_change_score, self.h / 2 + 30))
+            text_rect_score = surface_score.get_rect(center=(self.w / 2, self.h / 2 + 30))
 
             screen.blit(surface_state, text_rect_state)
             screen.blit(surface_score, text_rect_score)
