@@ -1,4 +1,5 @@
 import pygame
+import time
 from brick import get_brick_h, get_brick_w, get_bricks
 
 
@@ -8,17 +9,20 @@ def cords_in_rect(x, y, rect_x, rect_y, rect_w, rect_h):
 
 clock = pygame.time.Clock()
 
-
+SCORE_DURATION = 0.5
 class Game:
     def __init__(self, w, h, paddle, ball, n_bricks_x, n_bricks_y):
         self.w = w
         self.h = h
         self.paddle = paddle
         self.ball = ball
-        state = "ongoing"
-        self.state = state
+        self.state = "ongoing"
         self.font = pygame.font.SysFont("Arial", 30, )
         self.score = 0
+        # time when last block got destroyed
+        self.block_destroyed = None
+        self.destroyed_bricks = []
+
 
         brick_w = get_brick_w(w, n_bricks_x)
         brick_h = get_brick_h(h, n_bricks_y)
@@ -39,21 +43,21 @@ class Game:
         if self.ball.y >= self.h - self.ball.r:
             self.state = "lost"
 
-        prev_bricks = self.bricks
-        self.bricks = [brick for brick in self.bricks if
-                       not cords_in_rect(self.ball.x, self.ball.y, brick.x, brick.y, brick.w, brick.h)]
+        any_bricks_destroyed = False
+        new_bricks = []
+        for i, brick in enumerate(self.bricks):
+            if cords_in_rect(self.ball.x, self.ball.y, brick.x, brick.y, brick.w, brick.h):
+                any_bricks_destroyed = True
+                self.destroyed_bricks.append(brick)
+            else:
+                new_bricks.append(brick)
 
-        if len(prev_bricks) > len(self.bricks):
+        if any_bricks_destroyed:
             self.ball.dy *= -1
             self.score += 100
-            for brick in prev_bricks:
-                if brick not in self.bricks:
-                    missing_brick = brick
+            self.block_destroyed = time.time()
 
-            surface_popup_score = self.font.render("+100", False, (250, 250, 250))
-            text_rect_popup_score = surface_popup_score.get_rect(center=(self.w / 2, self.h / 2))
-            screen.blit(surface_popup_score, text_rect_popup_score)
-            pygame.display.flip()
+        self.bricks = new_bricks
 
         if len(self.bricks) == 0:
             self.state = "won"
@@ -65,6 +69,15 @@ class Game:
             self.ball.draw(screen)
             for brick in self.bricks:
                 brick.draw(screen)
+            if self.block_destroyed:
+                if time.time() - self.block_destroyed < SCORE_DURATION:
+                    for brick in self.destroyed_bricks:
+                        surface_popup_score = self.font.render("+100", False, (250, 250, 250))
+                        text_rect_popup_score = surface_popup_score.get_rect(center=(brick.x + brick.w/2, brick.y + brick.h/2))
+                        screen.blit(surface_popup_score, text_rect_popup_score)
+                else:
+                    self.destroyed_bricks.clear()
+
         else:
             surface_state = self.font.render(f"You {self.state}", False, (250, 250, 250))
             surface_score = self.font.render(f"Score {self.score}", False, (250, 250, 250))
@@ -74,5 +87,6 @@ class Game:
 
             screen.blit(surface_state, text_rect_state)
             screen.blit(surface_score, text_rect_score)
+
 
         pygame.display.flip()
