@@ -9,9 +9,12 @@ class Paddle:
         self.h = h
         self.color = color
 
-    def move(self, mouse_pos):
-        mouse_x, mouse_y = mouse_pos
-        self.x = mouse_x - self.w // 2
+    def move(self, x_pos, window_w):
+        self.x = x_pos - self.w // 2
+        if self.x + self.w > window_w:
+            self.x = window_w - self.w
+        elif self.x < 0:
+            self.x = 0
 
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, pygame.Rect(self.x, self.y, self.w, self.h))

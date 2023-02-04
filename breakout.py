@@ -23,9 +23,9 @@ while active:
             active = False
 
         if event.type == pygame.MOUSEMOTION:
-            paddle.move(event.pos)
+            paddle.move(event.pos[0], w)
 
     clock.tick(30)
 
-    game.update(screen)
+    game.update()
     game.draw(screen)
