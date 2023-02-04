@@ -9,7 +9,9 @@ def cords_in_rect(x, y, rect_x, rect_y, rect_w, rect_h):
 
 clock = pygame.time.Clock()
 
-SCORE_DURATION = 0.5
+SCORE_DURATION = 0.2
+
+
 class Game:
     def __init__(self, w, h, paddle, ball, n_bricks_x, n_bricks_y):
         self.w = w
@@ -23,12 +25,11 @@ class Game:
         self.block_destroyed = None
         self.destroyed_bricks = []
 
-
         brick_w = get_brick_w(w, n_bricks_x)
         brick_h = get_brick_h(h, n_bricks_y)
         self.bricks = get_bricks(n_bricks_x, n_bricks_y, brick_w, brick_h)
 
-    def update(self, screen):
+    def update(self):
         self.ball.move()
 
         if cords_in_rect(self.ball.x, self.ball.y, self.paddle.x, self.paddle.y, self.paddle.w, self.paddle.h):
@@ -73,11 +74,11 @@ class Game:
                 if time.time() - self.block_destroyed < SCORE_DURATION:
                     for brick in self.destroyed_bricks:
                         surface_popup_score = self.font.render("+100", False, (250, 250, 250))
-                        text_rect_popup_score = surface_popup_score.get_rect(center=(brick.x + brick.w/2, brick.y + brick.h/2))
+                        text_rect_popup_score = surface_popup_score.get_rect(
+                            center=(brick.x + brick.w / 2, brick.y + brick.h / 2))
                         screen.blit(surface_popup_score, text_rect_popup_score)
                 else:
                     self.destroyed_bricks.clear()
-
         else:
             surface_state = self.font.render(f"You {self.state}", False, (250, 250, 250))
             surface_score = self.font.render(f"Score {self.score}", False, (250, 250, 250))
@@ -87,6 +88,5 @@ class Game:
 
             screen.blit(surface_state, text_rect_state)
             screen.blit(surface_score, text_rect_score)
-
 
         pygame.display.flip()
