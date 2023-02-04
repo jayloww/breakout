@@ -9,6 +9,7 @@ def cords_in_rect(x, y, rect_x, rect_y, rect_w, rect_h):
 
 clock = pygame.time.Clock()
 
+COLOR = (149, 42, 163)
 SCORE_DURATION = 0.2
 
 
@@ -19,7 +20,7 @@ class Game:
         self.paddle = paddle
         self.ball = ball
         self.state = "ongoing"
-        self.font = pygame.font.SysFont("Arial", 30, )
+        self.font = pygame.font.SysFont("Arial", 30)
         self.score = 0
         # time when last block got destroyed
         self.block_destroyed = None
@@ -32,7 +33,14 @@ class Game:
     def update(self):
         self.ball.move()
 
-        if cords_in_rect(self.ball.x, self.ball.y, self.paddle.x, self.paddle.y, self.paddle.w, self.paddle.h):
+        if cords_in_rect(
+            self.ball.x,
+            self.ball.y,
+            self.paddle.x,
+            self.paddle.y,
+            self.paddle.w,
+            self.paddle.h,
+        ):
             self.ball.dy *= -1
 
         if self.ball.x < self.ball.r or self.ball.x >= self.w - self.ball.r:
@@ -47,7 +55,9 @@ class Game:
         any_bricks_destroyed = False
         new_bricks = []
         for i, brick in enumerate(self.bricks):
-            if cords_in_rect(self.ball.x, self.ball.y, brick.x, brick.y, brick.w, brick.h):
+            if cords_in_rect(
+                self.ball.x, self.ball.y, brick.x, brick.y, brick.w, brick.h
+            ):
                 any_bricks_destroyed = True
                 self.destroyed_bricks.append(brick)
             else:
@@ -73,18 +83,21 @@ class Game:
             if self.block_destroyed:
                 if time.time() - self.block_destroyed < SCORE_DURATION:
                     for brick in self.destroyed_bricks:
-                        surface_popup_score = self.font.render("+100", False, (250, 250, 250))
+                        surface_popup_score = self.font.render("+100", False, COLOR)
                         text_rect_popup_score = surface_popup_score.get_rect(
-                            center=(brick.x + brick.w / 2, brick.y + brick.h / 2))
+                            center=(brick.x + brick.w / 2, brick.y + brick.h / 2)
+                        )
                         screen.blit(surface_popup_score, text_rect_popup_score)
                 else:
                     self.destroyed_bricks.clear()
         else:
-            surface_state = self.font.render(f"You {self.state}", False, (250, 250, 250))
-            surface_score = self.font.render(f"Score {self.score}", False, (250, 250, 250))
+            surface_state = self.font.render(f"You {self.state}", False, COLOR)
+            surface_score = self.font.render(f"Score {self.score}", False, COLOR)
 
             text_rect_state = surface_state.get_rect(center=(self.w / 2, self.h / 2))
-            text_rect_score = surface_score.get_rect(center=(self.w / 2, self.h / 2 + 30))
+            text_rect_score = surface_score.get_rect(
+                center=(self.w / 2, self.h / 2 + 30)
+            )
 
             screen.blit(surface_state, text_rect_state)
             screen.blit(surface_score, text_rect_score)
