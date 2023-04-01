@@ -7,9 +7,7 @@ def cords_in_rect(x, y, rect_x, rect_y, rect_w, rect_h):
     return rect_x <= x <= rect_x + rect_w and rect_y <= y <= rect_y + rect_h
 
 
-clock = pygame.time.Clock()
-
-COLOR = (149, 42, 163)
+TEXT_COLOR = (149, 42, 163)
 SCORE_DURATION = 0.2
 
 
@@ -83,7 +81,7 @@ class Game:
             if self.block_destroyed:
                 if time.time() - self.block_destroyed < SCORE_DURATION:
                     for brick in self.destroyed_bricks:
-                        surface_popup_score = self.font.render("+100", False, COLOR)
+                        surface_popup_score = self.font.render("+100", False, TEXT_COLOR)
                         text_rect_popup_score = surface_popup_score.get_rect(
                             center=(brick.x + brick.w / 2, brick.y + brick.h / 2)
                         )
@@ -91,8 +89,8 @@ class Game:
                 else:
                     self.destroyed_bricks.clear()
         else:
-            surface_state = self.font.render(f"You {self.state}", False, COLOR)
-            surface_score = self.font.render(f"Score {self.score}", False, COLOR)
+            surface_state = self.font.render(f"You {self.state}", False, TEXT_COLOR)
+            surface_score = self.font.render(f"Score {self.score}", False, TEXT_COLOR)
 
             text_rect_state = surface_state.get_rect(center=(self.w / 2, self.h / 2))
             text_rect_score = surface_score.get_rect(
