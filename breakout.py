@@ -21,7 +21,6 @@ while active:
     for event in events:
         if event.type == pygame.QUIT:
             active = False
-
         if event.type == pygame.MOUSEMOTION:
             paddle.move(event.pos[0], w)
 

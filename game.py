@@ -1,10 +1,25 @@
 import pygame
 import time
+from enum import Enum
 from brick import get_brick_h, get_brick_w, get_bricks
 from util import cords_in_rect
 
 TEXT_COLOR = (149, 42, 163)
 SCORE_DURATION = 0.2
+
+class GameState(Enum):
+    Running = 0
+    Lost = 1
+    Won = 2
+
+    def message(self) -> str:
+        if self == self.Running:
+            raise ValueError("No message for running state")
+        elif self == self.Lost:
+            return "You lost"
+        elif self == self.Won:
+            return "You won"
+        raise ValueError(f"Exhaustive handling of GameState: {self.value}")
 
 
 class Game:
@@ -13,7 +28,7 @@ class Game:
         self.h = h
         self.paddle = paddle
         self.ball = ball
-        self.state = "ongoing"
+        self.state = GameState.Running
         self.font = pygame.font.SysFont("Arial", 30)
         self.score = 0
         # time when last block got destroyed
@@ -44,7 +59,7 @@ class Game:
             self.ball.dy *= -1
 
         if self.ball.y >= self.h - self.ball.r:
-            self.state = "lost"
+            self.state = GameState.Lost
 
         any_bricks_destroyed = False
         new_bricks = []
@@ -65,11 +80,11 @@ class Game:
         self.bricks = new_bricks
 
         if len(self.bricks) == 0:
-            self.state = "won"
+            self.state = GameState.Won
 
     def draw(self, screen):
         screen.fill((0, 0, 0))
-        if self.state == "ongoing":
+        if self.state == GameState.Running:
             self.paddle.draw(screen)
             self.ball.draw(screen)
             for brick in self.bricks:
@@ -85,7 +100,7 @@ class Game:
                 else:
                     self.destroyed_bricks.clear()
         else:
-            surface_state = self.font.render(f"You {self.state}", False, TEXT_COLOR)
+            surface_state = self.font.render(self.state.message(), False, TEXT_COLOR)
             surface_score = self.font.render(f"Score {self.score}", False, TEXT_COLOR)
 
             text_rect_state = surface_state.get_rect(center=(self.w / 2, self.h / 2))
