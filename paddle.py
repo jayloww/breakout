@@ -17,7 +17,9 @@ class Paddle:
             self.x = 0
 
     def draw(self, screen):
-        pygame.draw.rect(screen, self.color, pygame.Rect(self.x, self.y, self.w, self.h))
+        pygame.draw.rect(
+            screen, self.color, pygame.Rect(self.x, self.y, self.w, self.h)
+        )
 
     def __repr__(self):
         return f"Paddle(x={self.x}, y={self.y}, w ={self.w}, h={self.h}, color={self.color} )"

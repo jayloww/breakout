@@ -7,6 +7,7 @@ from util import cords_in_rect
 TEXT_COLOR = (149, 42, 163)
 SCORE_DURATION = 0.2
 
+
 class GameState(Enum):
     Running = 0
     Lost = 1
@@ -92,7 +93,9 @@ class Game:
             if self.block_destroyed:
                 if time.time() - self.block_destroyed < SCORE_DURATION:
                     for brick in self.destroyed_bricks:
-                        surface_popup_score = self.font.render("+100", False, TEXT_COLOR)
+                        surface_popup_score = self.font.render(
+                            "+100", False, TEXT_COLOR
+                        )
                         text_rect_popup_score = surface_popup_score.get_rect(
                             center=(brick.x + brick.w / 2, brick.y + brick.h / 2)
                         )

@@ -33,4 +33,6 @@ class Brick:
         return f"Paddle(x={self.x}, y={self.y}, w ={self.w}, h={self.h}, color={self.color} )"
 
     def draw(self, screen):
-        pygame.draw.rect(screen, self.color, pygame.Rect(self.x, self.y, self.w, self.h))
+        pygame.draw.rect(
+            screen, self.color, pygame.Rect(self.x, self.y, self.w, self.h)
+        )
