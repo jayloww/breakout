@@ -1,6 +1,8 @@
-import pygame
 import time
 from enum import Enum
+
+import pygame
+
 from brick import get_brick_h, get_brick_w, get_bricks
 from util import cords_in_rect
 

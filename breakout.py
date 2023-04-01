@@ -1,7 +1,8 @@
 import pygame
-from paddle import Paddle
+
 from ball import Ball
 from game import Game
+from paddle import Paddle
 
 w, h = 640, 400
 
