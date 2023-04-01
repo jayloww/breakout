@@ -1,11 +1,7 @@
 import pygame
 import time
 from brick import get_brick_h, get_brick_w, get_bricks
-
-
-def cords_in_rect(x, y, rect_x, rect_y, rect_w, rect_h):
-    return rect_x <= x <= rect_x + rect_w and rect_y <= y <= rect_y + rect_h
-
+from util import cords_in_rect
 
 TEXT_COLOR = (149, 42, 163)
 SCORE_DURATION = 0.2
